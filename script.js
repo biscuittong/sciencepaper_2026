@@ -1,25 +1,134 @@
-// 필요한 HTML 요소들을 가져옵니다.
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("expandedImg");
-const closeBtn = document.getElementsByClassName("close")[0];
-const galleryImages = document.querySelectorAll(".gallery-item img");
+/* 기본 스타일 초기화 및 폰트 설정 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-// 전시된 모든 사진에 클릭 이벤트를 추가합니다.
-galleryImages.forEach(img => {
-    img.addEventListener("click", function() {
-        modal.style.display = "block";  // 모달 창을 보여줌
-        modalImg.src = this.src;        // 클릭한 사진의 주소를 모달 이미지 주소로 설정
-    });
-});
+body {
+    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+}
 
-// X 버튼을 누르면 창이 닫힙니다.
-closeBtn.addEventListener("click", function() {
-    modal.style.display = "none";
-});
+/* 상단 제목 디자인 */
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #111111;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 30px;
+}
 
-// 사진 바깥의 어두운 배경을 클릭해도 창이 닫힙니다.
-window.addEventListener("click", function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-});
+header h1 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* 갤러리 그리드 레이아웃 (전시 형태) */
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px; /* 파일 이름이 추가되어 간격을 조금 더 넓혔습니다 */
+    padding: 0 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 개별 사진 컨테이너 설정 */
+.gallery-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 사진 디자인 및 테두리 추가 */
+.gallery-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #444444; /* 사진에 테두리 추가 */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* 사진 아래 파일 이름 */
+.gallery-item figcaption {
+    margin-top: 12px;
+    font-size: 1rem;
+    color: #cccccc;
+    letter-spacing: 0.5px;
+}
+
+/* 사진에 마우스를 올렸을 때의 효과 */
+.gallery-item img:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15); 
+    border-color: #ffffff; /* 마우스를 올리면 테두리가 하얗게 빛납니다 */
+}
+
+/* --- 모달 (확대된 이미지) 디자인 --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    padding-top: 40px; /* 위쪽 여백 살짝 줄임 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+/* 팝업창 사진 위쪽 파일 이름 디자인 */
+.modal-caption {
+    margin: 0 auto 15px auto;
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    animation: zoomIn 0.3s ease;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 75vh; /* 캡션 공간 확보를 위해 높이 살짝 줄임 */
+    object-fit: contain;
+    border-radius: 8px;
+    border: 3px solid #666666; /* 확대된 사진에도 테두리 추가 */
+    animation: zoomIn 0.3s ease;
+}
+
+/* 닫기 버튼 (우측 상단 X) */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #aaaaaa;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 확대 애니메이션 */
+@keyframes zoomIn {
+    from {transform: scale(0.8); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
