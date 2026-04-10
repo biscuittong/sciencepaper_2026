@@ -1,105 +1,30 @@
-/* 기본 스타일 초기화 및 폰트 설정 */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+const modal = document.getElementById("imageModal");
+const modalImg = document.getElementById("expandedImg");
+const modalCaption = document.getElementById("modalCaption"); // 캡션 요소 가져오기
+const closeBtn = document.getElementsByClassName("close")[0];
+const galleryImages = document.querySelectorAll(".gallery-item img");
 
-body {
-    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
-    background-color: #000000; /* 배경을 완벽한 검은색으로 변경 */
-    color: #ffffff; /* 글자색을 흰색으로 변경하여 잘 보이게 설정 */
-}
+galleryImages.forEach(img => {
+    img.addEventListener("click", function() {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        
+        // 이미지의 전체 주소에서 파일 이름만 추출 (예: images/1.jpg -> 1.jpg)
+        const fileName = this.src.substring(this.src.lastIndexOf('/') + 1);
+        
+        // 추출한 파일 이름을 모달 위쪽 캡션에 텍스트로 넣기
+        modalCaption.textContent = fileName;
+    });
+});
 
-/* 상단 제목 디자인 */
-header {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #111111; /* 제목 배경을 살짝 덜 어두운 검은색으로 주어 분리감 부여 */
-    border-bottom: 1px solid #333333; /* 그림자 대신 은은한 테두리로 경계선 표시 */
-    margin-bottom: 30px;
-}
+// X 버튼을 누르면 창이 닫힙니다.
+closeBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+});
 
-header h1 {
-    font-size: 2.5rem;
-    color: #ffffff; /* 제목 글자색 흰색 */
-    font-weight: bold;
-    letter-spacing: 1px; /* 글자 간격을 살짝 넓혀서 세련된 느낌 추가 */
-}
-
-/* 갤러리 그리드 레이아웃 (전시 형태) */
-.gallery-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 0 20px 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* 개별 사진 디자인 */
-.gallery-item img {
-    width: 100%;
-    height: 300px; /* 사진을 일정한 높이로 맞춤 */
-    object-fit: cover; /* 사진 비율을 유지하며 여백을 채움 */
-    border-radius: 8px;
-    cursor: pointer;
-    /* 어두운 배경에 맞게 그림자(빛) 색상을 반투명한 흰색 톤으로 조정 */
-    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* 사진에 마우스를 올렸을 때의 효과 */
-.gallery-item img:hover {
-    transform: translateY(-5px) scale(1.02);
-    /* 마우스를 올리면 사진 뒤에서 은은하게 빛이 나는 듯한 효과 */
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15); 
-}
-
-/* --- 모달 (확대된 이미지) 디자인 --- */
-.modal {
-    display: none; /* 평소에는 숨김 */
-    position: fixed;
-    z-index: 999;
-    padding-top: 50px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95); /* 사진에 집중할 수 있도록 배경을 더 짙은 검은색으로 처리 */
-}
-
-.modal-content {
-    margin: auto;
-    display: block;
-    max-width: 90%;
-    max-height: 85vh;
-    object-fit: contain;
-    border-radius: 8px;
-    animation: zoomIn 0.3s ease; /* 부드럽게 나타나는 애니메이션 */
-}
-
-/* 닫기 버튼 (우측 상단 X) */
-.close {
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    color: #aaaaaa;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.close:hover,
-.close:focus {
-    color: #ffffff; /* 마우스를 올렸을 때 완전한 흰색으로 빛나게 변경 */
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* 확대 애니메이션 */
-@keyframes zoomIn {
-    from {transform: scale(0.8); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
-}
+// 사진 바깥의 어두운 배경을 클릭해도 창이 닫힙니다.
+window.addEventListener("click", function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+});
